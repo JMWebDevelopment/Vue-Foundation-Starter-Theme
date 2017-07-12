@@ -1,23 +1,29 @@
 <template>
-    <div id="homepage">
+    <div id="homepage" class="row">
         <h2 class="title is-2">Latest Posts</h2>
 
-        <search></search>
-
-        <list-posts v-bind:posts="posts"></list-posts>
+        <div class="list-posts large-12 columns">
+                <div v-for="post in posts" :key="post.id" v-bind:post="post">
+                    <div class="preview-post">
+                            <router-link :to="{ name:'post', params: {postSlug: post.slug} }">
+                                <h2 class="post-title title is-3" v-html="post.title.rendered"></h2>
+                                <p class="post-excerpt" v-html="post.excerpt.rendered"></p>
+                                <p><router-link :to="{ name:'post', params: {postSlug: post.slug} }" class="read-more">Read More</router-link></p>
+                            </router-link>
+                        </div>
+                </div>
+        </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios'
-import ListPosts from '../global/ListPosts.vue'
-import Search from '../forms/Search.vue'
 export default {
   name: 'Homepage',
   data () {
     return {
       title: 'VueJS WordPress Theme',
-      posts: []
+      posts: this.getPosts()
     }
   },
   created () {
@@ -26,7 +32,7 @@ export default {
   },
   methods: {
     getPosts () {
-      let postsUrl = process.env.API_URL + '/wp-json/wp/v2/posts'
+      let postsUrl = vuefoundationstarter.root + 'wp/v2/posts'
       if (this.$route.query.page !== undefined) {
         postsUrl += '?page=' + this.$route.query.page
       }
@@ -38,10 +44,6 @@ export default {
         console.log(e)
       })
     }
-  },
-  components: {
-    'list-posts': ListPosts,
-    Search
   }
 }
 </script>

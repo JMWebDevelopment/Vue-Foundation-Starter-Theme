@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import Homepage from '../components/Homepage.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -12,7 +14,7 @@ export default new Router({
             component: Homepage
         },
 
-        {
+        /*{
             name: 'Category',
             path: '/c/:categorySlug',
             component: CategoryPage
@@ -70,6 +72,6 @@ export default new Router({
             name: 'NotFound',
             path: '*',
             component: NotFoundPage
-        }
+        }*/
     ]
 })
