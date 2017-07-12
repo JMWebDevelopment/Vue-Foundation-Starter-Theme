@@ -1,17 +1,15 @@
 <template>
     <div id="homepage" class="row">
-        <h2 class="title is-2">Latest Posts</h2>
-
         <div class="list-posts large-12 columns">
-                <div v-for="post in posts" :key="post.id" v-bind:post="post">
-                    <div class="preview-post">
-                            <router-link :to="{ name:'post', params: {postSlug: post.slug} }">
-                                <h2 class="post-title title is-3" v-html="post.title.rendered"></h2>
-                                <p class="post-excerpt" v-html="post.excerpt.rendered"></p>
-                                <p><router-link :to="{ name:'post', params: {postSlug: post.slug} }" class="read-more">Read More</router-link></p>
-                            </router-link>
-                        </div>
+            <div v-for="post in posts" :key="post.id" v-bind:post="post">
+                <div class="preview-post">
+                    <router-link :to="{ name:'post', params: {postSlug: post.slug} }">
+                        <h2 class="post-title title is-3" v-html="post.title.rendered"></h2>
+                        <p class="post-excerpt" v-html="post.excerpt.rendered"></p>
+                        <p><router-link :to="{ name:'post', params: {postSlug: post.slug} }" class="read-more">Read More</router-link></p>
+                    </router-link>
                 </div>
+            </div>
         </div>
     </div>
 </template>
@@ -23,7 +21,7 @@ export default {
   data () {
     return {
       title: 'VueJS WordPress Theme',
-      posts: this.getPosts()
+      posts: []
     }
   },
   created () {
