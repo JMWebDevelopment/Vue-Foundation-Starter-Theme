@@ -141,3 +141,111 @@ register_nav_menus(
 				'footer-links' => __( 'Footer Links', 'theme-slug' ) // Secondary nav in footer
 		)
 );
+
+function theme_slug_custom_rewrite_rule() {
+    global $wp_rewrite;
+    $wp_rewrite->front               = $wp_rewrite->root;
+    $wp_rewrite->set_permalink_structure( 'blog/%postname%/' );
+    $wp_rewrite->page_structure      = $wp_rewrite->root . 'page/%pagename%/';
+    $wp_rewrite->author_base         = 'author';
+    $wp_rewrite->author_structure    = '/' . $wp_rewrite->author_base . '/%author%';
+    $wp_rewrite->set_category_base( 'category' );
+    $wp_rewrite->set_tag_base( 'tag' );
+    $wp_rewrite->add_rule( '^blog$', 'index.php', 'top' );
+}
+add_action( 'init', 'theme_slug_custom_rewrite_rule' );
+
+//Forcing permalink structure
+add_action( 'permalink_structure_changed', 'theme_slug_forcee_perma_struct', 10, 2 );
+function theme_slug_forcee_perma_struct( $old, $new ) {
+    update_option( 'permalink_structure', 'blog/%postname%' );
+}
+
+// Polyfill for wp_title()
+add_filter( 'wp_title','theme_slug_vue_title', 10, 3 );
+function theme_slug_vue_title( $title, $sep, $seplocation ) {
+    if ( false !== strpos( $title, __( 'Page not found' ) ) ) {
+        $replacement = ucwords( str_replace( '/', ' ', $_SERVER['REQUEST_URI'] ) );
+        $title       = str_replace( __( 'Page not found' ), $replacement, $title );
+    }
+    return $title;
+}
+
+// Extend rest response
+add_action( 'rest_api_init', 'theme_slug_extend_rest_post_response' );
+function theme_slug_extend_rest_post_response() {
+    // Add featured image
+    register_rest_field( 'post',
+        'featured_image_src', //NAME OF THE NEW FIELD TO BE ADDED - you can call this anything
+        array(
+            'get_callback'    => 'theme_slug_get_image_src',
+            'update_callback' => null,
+            'schema'          => null,
+        )
+    );
+
+    register_rest_field( 'post',
+        'cat_name', //NAME OF THE NEW FIELD TO BE ADDED - you can call this anything
+        array(
+            'get_callback'    => 'theme_slug_get_cat_name',
+            'update_callback' => null,
+            'schema'          => null,
+        )
+    );
+
+    register_rest_field( 'post',
+        'tag_name',
+        array(
+            'get_callback'    => 'theme_slug_get_tag_name',
+            'update_callback' => null,
+            'schema'          => null,
+        )
+    );
+}
+
+// Get featured image
+function theme_slug_get_image_src( $object, $field_name, $request ) {
+    $feat_img_array['full'] = wp_get_attachment_image_src( $object['featured_media'], 'full', false );
+    $feat_img_array['thumbnail'] = wp_get_attachment_image_src( $object['featured_media'], 'thumbnail', false );
+    $feat_img_array['srcset'] = wp_get_attachment_image_srcset( $object['featured_media'] );
+    $image = is_array( $feat_img_array ) ? $feat_img_array : 'false';
+    return $image;
+}
+
+function theme_slug_get_cat_name( $object, $field_name, $request ) {
+    $cats = $object['categories'];
+    $res = [];
+    $ob = [];
+    foreach ( $cats as $x ) {
+        $cat_id = (int) $x;
+        $cat = get_category( $cat_id );
+        if ( is_wp_error( $cat ) ) {
+            $res[] = '';
+        } else {
+            $ob['name'] = isset( $cat->name ) ? $cat->name : '';
+            $ob['id']   = isset( $cat->term_id ) ? $cat->term_id : '';
+            $ob['slug'] = isset( $cat->slug ) ? $cat->slug : '';
+            $res[] = $ob;
+        }
+    }
+    return $res;
+}
+
+function theme_slug_get_tag_name( $object, $field_name, $request ) {
+    $tags = $object['tags'];
+    $res = [];
+    $ob = [];
+    foreach ( $tags as $x ) {
+        $tag_id = (int) $x;
+        $tag = get_tag( $tag_id );
+        if ( is_wp_error( $tag ) ) {
+            $res[] = '';
+        } else {
+            $ob['name'] = isset( $tag->name ) ? $tag->name : '';
+            $ob['id'] = isset( $tag->term_id ) ? $tag->term_id : '';
+            $ob['slug'] = isset( $tag->slug ) ? $tag->slug : '';
+            $res[] = $ob;
+        }
+    }
+    return $res;
+}

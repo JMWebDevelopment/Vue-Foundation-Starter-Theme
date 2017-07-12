@@ -64,7 +64,7 @@ export default new Router({
 
         {
             name: 'post',
-            path: '/:postSlug',
+            path: '/blog/:postSlug',
             component: Single
         },
 
