@@ -64,7 +64,13 @@ export default {
 			.then( ( res ) => {
 				vm.post = res.data[ 0 ];
 				vm.loaded = 'true';
+
+                if (vm.post === undefined) {
+                    vm.$router.push({name: 'NotFound'})
+                }
+
 				vm.pageTitle = vm.post.title.rendered;
+
 				vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
 
 				axios.get(vuefoundationstarter.root + 'wp/v2/users/' + this.post.author)

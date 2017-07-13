@@ -51,6 +51,11 @@
                         vm.loaded = 'true';
                         vm.pageTitle = vm.page.title.rendered;
                         vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
+
+                        if (vm.post === undefined) {
+                            vm.$router.push({name: 'NotFound'})
+                        }
+
                     } )
                     .catch( ( res ) => {
                         //console.log( `Something went wrong : ${ res }` );
