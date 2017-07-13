@@ -12,10 +12,10 @@ const store = new Vuex.Store( {
         title: ''
     },
     mutations: {
-        rtChangeTitle( state, value ) {
+        themeSlugChangeTitle( state, value ) {
             // mutate state
             state.title = value;
-            document.title = ( state.title ? state.title + ' - ' : '' ) + rtwp.site_name;
+            document.title = ( state.title ? state.title + ' - ' : '' ) + vuefoundationstarter.site_name;
         }
     }
 } );

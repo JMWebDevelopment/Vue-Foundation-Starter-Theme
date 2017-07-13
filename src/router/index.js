@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Homepage from '../components/Homepage.vue'
+import Single from '../components/SinglePost.vue'
 
 Vue.use(Router)
 
@@ -12,6 +13,12 @@ export default new Router({
             path: '/',
             name: 'Homepage',
             component: Homepage
+        },
+
+        {
+            name: 'post',
+            path: '/blog/:postSlug',
+            component: Single
         },
 
         /*{
@@ -60,12 +67,6 @@ export default new Router({
             name: 'Search',
             path: '/search/:searchTerm',
             component: Search
-        },
-
-        {
-            name: 'post',
-            path: '/blog/:postSlug',
-            component: Single
         },
 
         {
