@@ -6,6 +6,7 @@ import Single from '../components/SinglePost.vue'
 import Page from '../components/Page.vue'
 import CategoryPage from '../components/Category.vue'
 import Tag from '../components/Tag.vue'
+import Author from '../components/Author.vue'
 import NotFoundPage from '../components/404.vue'
 
 Vue.use(Router)
@@ -37,11 +38,11 @@ export default new Router({
             component: Page
         },
 
-        /*{
+        {
             name: 'Author',
             path: '/author/:authorId',
             component: Author
-        },*/
+        },
 
         {
             name: 'Tag',
