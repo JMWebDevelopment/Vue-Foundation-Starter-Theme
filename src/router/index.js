@@ -7,6 +7,7 @@ import Page from '../components/Page.vue'
 import CategoryPage from '../components/Category.vue'
 import Tag from '../components/Tag.vue'
 import Author from '../components/Author.vue'
+import Year from '../components/Year.vue'
 import Search from '../components/Search.vue'
 import NotFoundPage from '../components/404.vue'
 
@@ -51,13 +52,13 @@ export default new Router({
             component: Tag
         },
 
-        /*{
+        {
             name: 'Year',
             path: '/:year/',
             component: Year
         },
 
-        {
+        /*{
             name: 'Month',
             path: '/:year/:month/',
             component: Month
