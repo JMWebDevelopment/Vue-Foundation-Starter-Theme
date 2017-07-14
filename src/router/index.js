@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Homepage from '../components/Homepage.vue'
 import Single from '../components/SinglePost.vue'
 import CategoryPage from '../components/Category.vue'
+import NotFoundPage from '../components/404.vue'
 
 Vue.use(Router)
 
@@ -68,12 +69,12 @@ export default new Router({
             name: 'Search',
             path: '/search/:searchTerm',
             component: Search
-        },
+        },*/
 
         {
             name: 'NotFound',
             path: '*',
             component: NotFoundPage
-        }*/
+        }
     ]
 })

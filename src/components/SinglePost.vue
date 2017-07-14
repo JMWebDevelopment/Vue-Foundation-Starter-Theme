@@ -63,6 +63,11 @@ export default {
 			axios.get( vuefoundationstarter.root + 'wp/v2/posts/?slug=' + vm.$route.params.postSlug )
 			.then( ( res ) => {
 				vm.post = res.data[ 0 ];
+
+                if (vm.post === undefined) {
+                    vm.$router.push({name: 'NotFound'})
+                }
+
 				vm.loaded = 'true';
 
                 if (vm.post === undefined) {
@@ -73,7 +78,7 @@ export default {
 
 				vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
 
-				axios.get(vuefoundationstarter.root + 'wp/v2/users/' + this.post.author)
+				axios.get(vuefoundationstarter.root + 'wp/v2/users/' + vm.post.author)
                       .then(response => {
                         this.author = response.data
                       })

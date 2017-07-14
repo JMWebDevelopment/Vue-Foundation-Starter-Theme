@@ -62,6 +62,11 @@
                 axios.get( vuefoundationstarter.root + 'wp/v2/posts?categories=' + catId )
                     .then( ( res ) => {
                         vm.posts = res.data;
+                        
+                        if (vm.posts === undefined) {
+                            vm.$router.push({name: 'NotFound'})
+                        }
+
                         vm.loaded = 'true';
                         vm.pageTitle = 'Category' + ' - ' + vm.catName;
                         vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
@@ -77,6 +82,11 @@
                 axios.get( vuefoundationstarter.root + 'wp/v2/categories?slug=' + name )
                     .then( ( res ) => {
                         res = res.data[ 0 ];
+
+                        if (res === undefined) {
+                            vm.$router.push({name: 'NotFound'})
+                        }
+
                         vm.totalCount = ( res.data );
                         vm.getPosts( res.id );
                     } )
