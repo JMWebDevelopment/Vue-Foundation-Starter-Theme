@@ -5,6 +5,7 @@ import Homepage from '../components/Homepage.vue'
 import Single from '../components/SinglePost.vue'
 import Page from '../components/Page.vue'
 import CategoryPage from '../components/Category.vue'
+import Tag from '../components/Tag.vue'
 import NotFoundPage from '../components/404.vue'
 
 Vue.use(Router)
@@ -40,15 +41,15 @@ export default new Router({
             name: 'Author',
             path: '/author/:authorId',
             component: Author
-        },
+        },*/
 
         {
             name: 'Tag',
-            path: '/tag/:authorId',
+            path: '/tag/:tagSlug',
             component: Tag
         },
 
-        {
+        /*{
             name: 'Year',
             path: '/:year/',
             component: Year

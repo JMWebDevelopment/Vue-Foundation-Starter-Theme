@@ -29,7 +29,7 @@
 						</div>
 
 						<div class="tag-list">
-							<router-link v-for="x in post.tag_name" :to="{ name: 'tag', params: { name:x.slug } }" :key="x.id"> {{ x.name }} </router-link>
+							<router-link v-for="x in post.tag_name" :to="{ name: 'Tag', params: { tagSlug:x.slug } }" :key="x.id"> {{ x.name }} </router-link>
 						</div>
 					</div>
 
