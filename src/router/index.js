@@ -3,8 +3,7 @@ import Router from 'vue-router'
 
 import Homepage from '../components/Homepage.vue'
 import Single from '../components/SinglePost.vue'
-import Page from '../components/Page.vue'
-import NotFound from '../components/404.vue'
+import CategoryPage from '../components/Category.vue'
 
 Vue.use(Router)
 
@@ -24,15 +23,15 @@ export default new Router({
         },
 
         {
-            name: 'Page',
-            path: '/page/:pageSlug',
-            component: Page
+            name: 'Category',
+            path: '/category/:categorySlug',
+            component: CategoryPage
         },
 
         /*{
-            name: 'Category',
-            path: '/c/:categorySlug',
-            component: CategoryPage
+            name: 'Page',
+            path: '/page/:page-slug',
+            component: Page
         },
 
         {
@@ -69,12 +68,12 @@ export default new Router({
             name: 'Search',
             path: '/search/:searchTerm',
             component: Search
-        },*/
+        },
 
         {
             name: 'NotFound',
             path: '*',
-            component: NotFound
-        }
+            component: NotFoundPage
+        }*/
     ]
 })
