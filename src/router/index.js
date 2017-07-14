@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Homepage from '../components/Homepage.vue'
 import Single from '../components/SinglePost.vue'
+import Page from '../components/Page.vue'
 import CategoryPage from '../components/Category.vue'
 import NotFoundPage from '../components/404.vue'
 
@@ -29,13 +30,13 @@ export default new Router({
             component: CategoryPage
         },
 
-        /*{
+        {
             name: 'Page',
-            path: '/page/:page-slug',
+            path: '/page/:pageSlug',
             component: Page
         },
 
-        {
+        /*{
             name: 'Author',
             path: '/author/:authorId',
             component: Author

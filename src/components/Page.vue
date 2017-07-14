@@ -52,9 +52,9 @@
                         vm.pageTitle = vm.page.title.rendered;
                         vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
 
-                        if (vm.post === undefined) {
+                        /*if (vm.page === undefined) {
                             vm.$router.push({name: 'NotFound'})
-                        }
+                        }*/
 
                     } )
                     .catch( ( res ) => {
