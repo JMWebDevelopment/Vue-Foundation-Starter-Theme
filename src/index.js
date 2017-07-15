@@ -6,6 +6,9 @@ import VueProgressiveImage from 'progressive-image/dist/vue';
 
 Vue.config.productionTip = false;
 Vue.use( Vuex );
+Vue.use( VueProgressiveImage, {
+    removePreview: true
+} );
 
 //Define vuex store
 const store = new Vuex.Store( {

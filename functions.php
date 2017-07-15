@@ -201,6 +201,14 @@ function theme_slug_extend_rest_post_response() {
             'schema'          => null,
         )
     );
+
+    register_rest_field( 'post',
+        'comments',
+        array(
+            'get_callback' 	  => 'theme_slug_get_comments',
+            'update_callback' => null,
+            'schema' 		  => null,
+        ) );
 }
 
 // Get featured image
@@ -248,4 +256,10 @@ function theme_slug_get_tag_name( $object, $field_name, $request ) {
         }
     }
     return $res;
+}
+
+function theme_slug_get_comments( $object, $field_name, $request ) {
+
+    return get_comments( array( 'post_id' => $object[ 'id' ] ) );
+
 }
