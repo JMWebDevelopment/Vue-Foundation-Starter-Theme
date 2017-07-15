@@ -15,6 +15,7 @@
 </template>
 <script>
 export default {
+    name: 'comment',
 	props: ['comment']
 };
 </script>
