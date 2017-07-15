@@ -62,30 +62,38 @@
             };
         },
         methods: {
+            isInteger: function ( input ) {
+                return /^\d+$/.test( input );
+            },
             getPage: function() {
                 const vm = this;
                 vm.loaded = 'false';
+                if ( vm.isInteger( vm.$route.params.year ) === false ) {
+                    console.log('definitely not a number');
+                } else {
+                    console.log('definitely a number');
+                }
+                if ( vm.$route.params.year.length !== 4 || vm.isInteger( vm.$route.params.year ) === false ) {
+                    console.log('not a number or valid');
+                    vm.$router.push({name: 'NotFound'})
+                } else {
+                    console.log('is a number and valid');
+                    var startDate = new Date(vm.$route.params.year, 0, 1);
 
-                var startDate = new Date(vm.$route.params.year, 0, 1);
+                    var endDate = new Date(vm.$route.params.year, 12, 1);
 
-                var endDate = new Date(vm.$route.params.year, 12, 1);
-                console.log( vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString() );
+                    axios.get(vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString())
+                        .then((res) => {
+                            vm.posts = res.data;
+                            vm.loaded = 'true';
+                            vm.pageTitle = vm.$route.params.year;
+                            vm.$store.commit('themeSlugChangeTitle', vm.pageTitle);
 
-                axios.get( vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString() )
-                    .then( ( res ) => {
-                        vm.posts = res.data;
-                        vm.loaded = 'true';
-                        vm.pageTitle = vm.$route.params.year;
-                        vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
-
-                        /*if (vm.page === undefined) {
-                         vm.$router.push({name: 'NotFound'})
-                         }*/
-
-                    } )
-                    .catch( ( res ) => {
-                        //console.log( `Something went wrong : ${ res }` );
-                    } );
+                        })
+                        .catch((res) => {
+                            //console.log( `Something went wrong : ${ res }` );
+                        });
+                }
             },
             formatDate: function( value ) {
                 value = value.date;

@@ -68,13 +68,14 @@
                 axios.get( vuefoundationstarter.root + 'wp/v2/posts/?search=' + vm.$route.params.searchTerm )
                     .then( ( res ) => {
                         vm.posts = res.data;
-                        vm.loaded = 'true';
-                        vm.pageTitle = vm.$route.params.searchTerm;
-                        vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
+                        if (vm.page === undefined) {
+                            vm.$router.push({name: 'NotFound'})
+                        } else {
+                            vm.loaded = 'true';
+                            vm.pageTitle = vm.$route.params.searchTerm;
+                            vm.$store.commit('themeSlugChangeTitle', vm.pageTitle);
+                        }
 
-                        /*if (vm.page === undefined) {
-                         vm.$router.push({name: 'NotFound'})
-                         }*/
 
                     } )
                     .catch( ( res ) => {

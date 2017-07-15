@@ -35,15 +35,10 @@
                 if (this.term !== '') {
                     const vm = this;
                     vm.loaded = false;
-                    console.log('pressed');
                     axios.get( vuefoundationstarter.root + 'wp/v2/posts/?search=' + vm.term )
                         .then( ( res ) => {
                             this.posts = res.data;
                             this.loaded = true;
-                            console.log(vm.posts);
-                            /*if (vm.page === undefined) {
-                             vm.$router.push({name: 'NotFound'})
-                             }*/
 
                         } )
                         .catch( ( res ) => {

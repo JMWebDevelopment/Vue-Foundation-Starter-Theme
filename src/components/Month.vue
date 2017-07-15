@@ -72,24 +72,25 @@
                 const vm = this;
                 vm.loaded = 'false';
 
-                var startDate = new Date(vm.$route.params.year, vm.$route.params.month - 1, 1);
+                if ( vm.$route.params.year.length !== 4 ) {
+                    vm.$router.push({name: 'NotFound'})
+                } else {
+                    var startDate = new Date(vm.$route.params.year, vm.$route.params.month - 1, 1);
 
-                var endDate = new Date(vm.$route.params.year, vm.$route.params.month + 1, 1);
-                console.log( vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString() );
+                    var endDate = new Date(vm.$route.params.year, vm.$route.params.month + 1, 1);
 
-                axios.get( vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString() )
-                    .then( ( res ) => {
-                        vm.posts = res.data;
-                        vm.loaded = 'true';
-                        const monthNames = [ "January", "February", "March",
-                            "April", "May", "June", "July",
-                            "August", "September", "October",
-                            "November", "December" ];
+                    axios.get(vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString())
+                        .then((res) => {
+                            vm.posts = res.data;
+                            vm.loaded = 'true';
+                            const monthNames = ["January", "February", "March",
+                                "April", "May", "June", "July",
+                                "August", "September", "October",
+                                "November", "December"];
 
-                        vm.pageTitle = monthNames[ vm.$route.params.month - 1 ] + ' ' + vm.$route.params.year;
-                        vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
-
-                        /*if (vm.page === undefined) {
+                            vm.pageTitle = monthNames[vm.$route.params.month - 1] + ' ' + vm.$route.params.year;
+                            vm.$store.commit('themeSlugChangeTitle', vm.pageTitle);
+                            /*if (vm.page === undefined) {
                          vm.$router.push({name: 'NotFound'})
                          }*/
 
@@ -97,6 +98,7 @@
                     .catch( ( res ) => {
                         //console.log( `Something went wrong : ${ res }` );
                     } );
+                }
             },
             formatDate: function( value ) {
                 value = value.date;

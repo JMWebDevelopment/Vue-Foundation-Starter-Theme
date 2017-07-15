@@ -73,30 +73,35 @@
                 const vm = this;
                 vm.loaded = 'false';
 
-                var startDate = new Date(vm.$route.params.year, vm.$route.params.month - 1, this.$route.params.day, 0, 0, 0, 0);
+                if ( vm.$route.params.year.length !== 4 ) {
+                    vm.$router.push({name: 'NotFound'})
+                } else {
 
-                var endDate = new Date(vm.$route.params.year, vm.$route.params.month + 1, this.$route.params.day + 1, 0, 0, 0, 0);
+                    var startDate = new Date(vm.$route.params.year, vm.$route.params.month - 1, this.$route.params.day, 0, 0, 0, 0);
 
-                axios.get( vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString() )
-                    .then( ( res ) => {
-                        vm.posts = res.data;
-                        vm.loaded = 'true';
-                        const monthNames = [ "January", "February", "March",
-                            "April", "May", "June", "July",
-                            "August", "September", "October",
-                            "November", "December" ];
+                    var endDate = new Date(vm.$route.params.year, vm.$route.params.month + 1, this.$route.params.day + 1, 0, 0, 0, 0);
 
-                        vm.pageTitle = monthNames[ vm.$route.params.month - 1 ] + ' ' + vm.$route.params.year + ', ' + vm.$route.params.year;
-                        vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
+                    axios.get( vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString() )
+                        .then( ( res ) => {
+                            vm.posts = res.data;
+                            vm.loaded = 'true';
+                            const monthNames = [ "January", "February", "March",
+                                "April", "May", "June", "July",
+                                "August", "September", "October",
+                                "November", "December" ];
 
-                        /*if (vm.page === undefined) {
-                         vm.$router.push({name: 'NotFound'})
-                         }*/
+                            vm.pageTitle = monthNames[ vm.$route.params.month - 1 ] + ' ' + vm.$route.params.year + ', ' + vm.$route.params.year;
+                            vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
 
-                    } )
-                    .catch( ( res ) => {
-                        //console.log( `Something went wrong : ${ res }` );
-                    } );
+                            /*if (vm.page === undefined) {
+                             vm.$router.push({name: 'NotFound'})
+                             }*/
+
+                        } )
+                        .catch( ( res ) => {
+                            //console.log( `Something went wrong : ${ res }` );
+                        } );
+                }
             },
             formatDate: function( value ) {
                 value = value.date;
