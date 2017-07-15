@@ -68,13 +68,9 @@
                 axios.get( vuefoundationstarter.root + 'wp/v2/posts/?search=' + vm.$route.params.searchTerm )
                     .then( ( res ) => {
                         vm.posts = res.data;
-                        if (vm.page === undefined) {
-                            vm.$router.push({name: 'NotFound'})
-                        } else {
-                            vm.loaded = 'true';
-                            vm.pageTitle = vm.$route.params.searchTerm;
-                            vm.$store.commit('themeSlugChangeTitle', vm.pageTitle);
-                        }
+                        vm.loaded = 'true';
+                        vm.pageTitle = vm.$route.params.searchTerm;
+                        vm.$store.commit('themeSlugChangeTitle', vm.pageTitle);
 
 
                     } )

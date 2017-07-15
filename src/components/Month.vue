@@ -68,11 +68,14 @@
             };
         },
         methods: {
+            isInteger: function ( input ) {
+                return /^\d+$/.test( input );
+            },
             getPage: function() {
                 const vm = this;
                 vm.loaded = 'false';
 
-                if ( vm.$route.params.year.length !== 4 ) {
+                if ( ( vm.$route.params.year.length !== 4 || vm.isInteger( vm.$route.params.year ) === false ) || ( vm.$route.params.month.length !== 2 || vm.isInteger( vm.$route.params.month ) === false ) ) {
                     vm.$router.push({name: 'NotFound'})
                 } else {
                     var startDate = new Date(vm.$route.params.year, vm.$route.params.month - 1, 1);

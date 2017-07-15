@@ -48,13 +48,14 @@
                 axios.get( vuefoundationstarter.root + 'wp/v2/pages/?slug=' + vm.$route.params.pageSlug )
                     .then( ( res ) => {
                         vm.page = res.data[ 0 ];
+
+                        if (vm.page === undefined) {
+                            vm.$router.push({name: 'NotFound'})
+                        }
+
                         vm.loaded = 'true';
                         vm.pageTitle = vm.page.title.rendered;
                         vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
-
-                        /*if (vm.page === undefined) {
-                            vm.$router.push({name: 'NotFound'})
-                        }*/
 
                     } )
                     .catch( ( res ) => {

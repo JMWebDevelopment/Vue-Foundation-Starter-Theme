@@ -67,6 +67,11 @@
                 axios.get( vuefoundationstarter.root + 'wp/v2/posts?author=' + tagId )
                     .then( ( res ) => {
                         vm.posts = res.data;
+
+                        if (vm.posts === undefined) {
+                            vm.$router.push({name: 'NotFound'})
+                        }
+
                         vm.loaded = 'true';
                         vm.pageTitle = vm.authorName;
                         vm.$store.commit( 'themeSlugChangeTitle', vm.pageTitle );
@@ -81,6 +86,11 @@
                 axios.get( vuefoundationstarter.root + 'wp/v2/users/?id=' + name )
                     .then( ( res ) => {
                         res = res.data[ 0 ];
+
+                        if (res === undefined) {
+                            vm.$router.push({name: 'NotFound'})
+                        }
+
                         vm.totalCount = ( res.data );
                         vm.author = res;
                         vm.authorName = res.name;
