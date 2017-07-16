@@ -57,6 +57,9 @@ function theme_slug_scripts() {
         'logged_in_user'    => $user
     ) );
 
+    // Adding scripts file in the footer
+    wp_enqueue_script( 'other-js', get_template_directory_uri() . '/src/assets/js/scripts.js', array( 'jquery' ), '', true );
+
 	// Register main stylesheet
 	wp_enqueue_style( 'site-css', get_template_directory_uri() . '/style.css', array(), '', 'all' );
 

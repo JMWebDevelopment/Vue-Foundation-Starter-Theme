@@ -15,4 +15,16 @@ jQuery(document).ready(function() {
 	// Adds Flex Video to YouTube and Vimeo Embeds
 	jQuery('iframe[src*="youtube.com"], iframe[src*="vimeo.com"]').wrap("<div class='flex-video'/>");
 
+	jQuery(document).on('click', '.remove-reply', function() {
+        console.log('reply removed');
+        jQuery( '#parent' ).val('0');
+        jQuery('.add-comment').html( 'Add Comment' );
+    })
+
 });
+
+function removeReply() {
+    console.log('reply removed');
+    jQuery( '#parent' ).val('0');
+    jQuery('.add-comment').html( 'Add Comment' );
+}

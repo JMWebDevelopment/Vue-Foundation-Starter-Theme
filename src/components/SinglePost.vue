@@ -15,9 +15,7 @@
 
 						<div class="progressive full">
 
-							<img class="lazy"
-								v-progressive="post.featured_image_src['full'][0]"
-								:data-srcset="post.featured_image_src['srcset']"
+							<img
 								:src="post.featured_image_src['full'][0]"
 							/>
 						</div>
