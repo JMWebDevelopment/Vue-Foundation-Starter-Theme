@@ -11,7 +11,6 @@
                 </div>
             </div>
             <div class="pagination row">
-                {{page}}
                 <div v-if="page > 1" class="newer-posts large-6 medium-6 small-6 columns">
                     <router-link :to="{ name: 'Homepage', query: { page: this.page - 1 }}" class="pagination-previous button" v-on:click.native="previousClick">Previous</router-link>
                 </div>
@@ -29,10 +28,7 @@ export default {
   name: 'Homepage',
   data () {
     if ( this.$route.query.page ) {
-        console.log('page is defined');
-        let currentPage = this.$route.query.page;
     } else {
-        console.log('page is not defined');
         this.$route.query.page = 1;
     }
     return {
