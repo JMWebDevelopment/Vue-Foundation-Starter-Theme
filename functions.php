@@ -30,6 +30,13 @@ function theme_slug_scripts() {
     $base_url  = esc_url_raw( home_url() );
     $base_path = rtrim( parse_url( $base_url, PHP_URL_PATH ), '/' );
 
+    // Adding scripts file in the footer
+    if ( is_user_logged_in() ) {
+        $user = wp_get_current_user();
+    } else {
+        $user = '';
+    }
+
 	// Load What-Input files in footer
 	wp_enqueue_script( 'what-input', get_template_directory_uri() . '/vendor/what-input/what-input.min.js', array(), '', true );
 
@@ -41,11 +48,13 @@ function theme_slug_scripts() {
 
 	// Localize the build script
     wp_localize_script( 'site-js', 'vuefoundationstarter', array(
-        'root'      => esc_url_raw( rest_url() ),
-        'base_url'  => $base_url,
-        'base_path' => $base_path ? $base_path . '/' : '/',
-        'nonce'     => wp_create_nonce( 'wp_rest' ),
-        'site_name' => get_bloginfo( 'name' ),
+        'root'              => esc_url_raw( rest_url() ),
+        'base_url'          => $base_url,
+        'base_path'         => $base_path ? $base_path . '/' : '/',
+        'nonce'             => wp_create_nonce( 'wp_rest' ),
+        'site_name'         => get_bloginfo( 'name' ),
+        'logged_in' 		=> is_user_logged_in(),
+        'logged_in_user'    => $user
     ) );
 
 	// Register main stylesheet
@@ -263,3 +272,13 @@ function theme_slug_get_comments( $object, $field_name, $request ) {
     return get_comments( array( 'post_id' => $object[ 'id' ] ) );
 
 }
+
+function filter_rest_allow_anonymous_comments() {
+    /*if ( get_theme_mod( 'quotidiano-allow-anonymous-comments' ) == 1 ) {
+        return true;
+    } else {
+        return false;
+    }*/
+    return true;
+}
+add_filter( 'rest_allow_anonymous_comments', 'filter_rest_allow_anonymous_comments' );

@@ -5,7 +5,7 @@
 
 				<div class="large-12 medium-12 small-12 column" >
 
-					<div class="post">
+					<div class="post" :id="post.ID">
 
 						<h2 class="post-title"> {{ post.title.rendered }}</h2>
 
@@ -32,11 +32,38 @@
 							<router-link v-for="x in post.tag_name" :to="{ name: 'Tag', params: { tagSlug:x.slug } }" :key="x.id"> {{ x.name }} </router-link>
 						</div>
 
-						<div class="comments">
-							<ul>
-								<comment v-for="comment in comments" :key="comment.id" v-bind:comment="comment"></comment>
-							</ul>
-						</div>
+						<section class="post-comments" v-if="post.comment_status == 'open'">
+
+							<div class="reply">
+								<h3 class="add-comment">Add Comment</h3>
+								<div class="comment-success" v-if="commentSubmitted === true">Thank you for submitting your comment.</div>
+								<form v-on:submit.prevent="saveComment" v-if="commentSubmitted === false">
+									<div class="form-group" v-if="loggedIn != '1'">
+										<input type="text" id="name" name="name" v-model="author_name" placeholder="Name*" required/>
+									</div>
+									<div class="form-group" v-if="loggedIn != '1'">
+										<input type="email" name="email" id="email" v-model="author_email" placeholder="Email Address*" required />
+									</div>
+									<div class="form-group"  v-if="loggedIn == '1'">
+										<p>Logged in as {{user.display_name}}.</p>
+										<input type="hidden" id="name" name="name" v-model="author_name" placeholder="Name*" required />
+										<input type="hidden" name="email" id="email" v-model="author_email" placeholder="Email Address*" required />
+									</div>
+									<div class="form-group">
+										<textarea required id="comment-content" name="comment" v-model="content" placeholder="Your Comment..."></textarea><br/>
+										<input type="hidden" name="parent" id="parent" value="0" v-model="parent" />
+									</div>
+									<input class="button" type="submit" value="Add Comment" />
+								</form>
+							</div>
+
+							<div class="comments">
+								<ul>
+									<comment v-for="comment in comments" :key="comment.id" v-bind:comment="comment"></comment>
+								</ul>
+							</div>
+
+						</section>
 					</div>
 
 				</div>
@@ -56,11 +83,27 @@ export default {
 		this.getPost();
 	},
 	data() {
+	    if ( vuefoundationstarter.logged_in === true ) {
+	        let user_name = vuefoundationstarter.logged_in_user.data.display_name;
+	        let user_email = vuefoundationstarter.logged_in_user.data.user_email;
+		} else {
+	        let user_name = '';
+	        let user_email = '';
+		}
 		return {
 			base_path: vuefoundationstarter.base_path,
 			post: {},
 			author: {},
 			comments: {},
+			openComment: {
+                author_name: this.user_name,
+                author_email: this.user_email,
+                parent: 0,
+                content: ''
+			},
+			loggedIn: vuefoundationstarter.logged_in,
+			user: vuefoundationstarter.logged_in_user.data,
+			commentSubmitted: false,
 			loaded: 'false',
 			pageTitle: ''
 		};
@@ -77,9 +120,9 @@ export default {
                 }
 
 				vm.loaded = 'true';
+                console.log(vm.loggedIn);
 
                 vm.comments = vm.arrangeComments( vm.post.comments );
-                console.log(vm.comments);
 
 				vm.pageTitle = vm.post.title.rendered;
 
@@ -143,7 +186,40 @@ export default {
             }
 
             return commentsList;
-        }
+        },
+		saveComment: function () {
+			const vm = this;
+			vm.openComment = {
+			    author_name: vm.author_name,
+                author_email: vm.author_email,
+                parent: vm.parent,
+                content: vm.content,
+                post: vm.post.id
+			}
+			const config = {
+                headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': vuefoundationstarter.nonce }
+			};
+            axios.defaults.baseURL = vuefoundationstarter.base_url;
+            //axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+            console.log(axios.defaults.headers.common['Authorization']);
+			axios.post( '/wp-json/wp/v2/comments', vm.openComment, config )
+				.then(function () {
+			    vm.openComment = {};
+                vm.author_name = '';
+                vm.author_email = '';
+                vm.parent = '';
+                vm.content = '';
+                vm.commentSubmitted = true;
+                jQuery('#name').val('');
+                jQuery('#email').val('');
+                jQuery('#comment-content').val('');
+                jQuery('#parent').val(0);
+			})
+                .catch(function (error) {
+                    console.log('not working');
+                    console.log(error);
+                });
+		}
 	},
 	components: {
 	    'comment': Comment
