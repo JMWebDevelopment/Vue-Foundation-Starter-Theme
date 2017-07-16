@@ -13,14 +13,17 @@ Vue.use( VueProgressiveImage, {
 //Define vuex store
 const store = new Vuex.Store( {
     state: {
-        title: ''
+        title: '',
+        currentPage: 1,
     },
     mutations: {
         themeSlugChangeTitle( state, value ) {
             // mutate state
             state.title = value;
             document.title = ( state.title ? state.title + ' - ' : '' ) + vuefoundationstarter.site_name;
-        }
+        },
+        next: state => state.currentPage++,
+        prev: state => state.currentPage--,
     }
 } );
 
