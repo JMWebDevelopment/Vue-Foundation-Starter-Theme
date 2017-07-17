@@ -58,13 +58,7 @@
         data() {
             if ( this.$route.query.page ) {
             } else {
-                if ( this.$route.params.page ) {
-                    console.log('page defined');
-                    this.$route.query.page = this.$route.params.page;
-                } else {
-                    console.log('page not defined');
-                    this.$route.query.page = 1;
-                }
+                this.$route.query.page = 1;
             }
             return {
                 posts: {},
@@ -82,8 +76,6 @@
                 vm.loaded = 'false';
                 if (this.$route.query.page !== undefined) {
                     this.postsUrl = '&page=' + this.$route.query.page;
-                } else if ( this.$route.params.page !== undefined ) {
-                    this.postsUrl = '&page=' + this.$route.params.page;
                 } else {
                     this.postsUrl = '';
                 }
