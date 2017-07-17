@@ -138,7 +138,7 @@
                     const day = date.getDate();
                     const monthIndex = date.getMonth();
                     const year = date.getFullYear();
-                    return monthNames[ monthIndex ] + ',' + day + ' ' + year;
+                    return monthNames[ monthIndex ] + ', ' + day + ' ' + year;
                 }
             },
             previousClick () {
