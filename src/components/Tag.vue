@@ -20,7 +20,7 @@
 
                     <div class="progressive full" v-if="post.featured_image_src['full'][0]">
 
-                        <img class="lazy" v-progressive="post.featured_image_src['full'][0]" :data-srcset="post.featured_image_src['srcset']" :src="post.featured_image_src['full'][0]" />
+                        <img class="lazy" :src="post.featured_image_src['full'][0]" />
 
                     </div>
 
@@ -28,6 +28,15 @@
 
                 </div>
 
+            </div>
+
+            <div class="pagination row">
+                <div v-if="page > 1" class="newer-posts large-6 medium-6 small-6 columns">
+                    <router-link :to="{ name: 'Tag', query: { page: this.page - 1 }} " class="pagination-previous button" v-on:click.native="previousClick">Previous</router-link>
+                </div>
+                <div v-if="page < totalPages" class="newer-posts large-6 medium-6 small-6 columns">
+                    <router-link :to="{ name: 'Tag', query: { page: this.page + 1 }}" class="pagination-next button" v-on:click.native="nextClick">Next</router-link>
+                </div>
             </div>
 
         </div>
@@ -46,21 +55,34 @@
             }
         },
         data() {
+            if ( this.$route.query.page ) {
+            } else {
+                this.$route.query.page = 1;
+            }
+
             return {
                 posts: {},
                 loaded: 'false',
                 pageTitle: '',
                 totalCount: '',
-                tagName: ''
+                tagName: '',
+                page: this.$route.query.page,
+                totalPages: '',
             };
         },
         methods: {
             getPosts: function( tagId ) {
                 const vm = this;
                 vm.loaded = 'false';
-                axios.get( vuefoundationstarter.root + 'wp/v2/posts?tags=' + tagId )
+                if (vm.$route.query.page !== undefined) {
+                    vm.postsUrl = '&page=' + vm.$route.query.page;
+                } else {
+                    vm.postsUrl = '';
+                }
+                axios.get( vuefoundationstarter.root + 'wp/v2/posts?tags=' + tagId + vm.postsUrl )
                     .then( ( res ) => {
                         vm.posts = res.data;
+                        vm.totalPages = res.headers['x-wp-totalpages'];
 
                         if (vm.posts === undefined) {
                             vm.$router.push({name: 'NotFound'})
@@ -76,7 +98,6 @@
             },
             getTagId: function( name ) {
                 const vm = this;
-                vm.tagName = name;
                 vm.loaded = 'false';
                 axios.get( vuefoundationstarter.root + 'wp/v2/tags/?slug=' + name )
                     .then( ( res ) => {
@@ -86,6 +107,7 @@
                             vm.$router.push({name: 'NotFound'})
                         }
 
+                        vm.tagName = res.name;
                         vm.totalCount = ( res.data );
                         vm.getPosts( res.id );
                     } )
@@ -106,7 +128,17 @@
                     const year = date.getFullYear();
                     return monthNames[ monthIndex ] + ',' + day + ' ' + year;
                 }
-            }
+            },
+            previousClick () {
+                this.page = this.page - 1;
+                this.getTagId(this.$route.params.tagSlug);
+                window.scrollTo(0, 0);
+            },
+            nextClick () {
+                this.page = this.page + 1;
+                this.getTagId(this.$route.params.tagSlug);
+                window.scrollTo(0, 0);
+            },
         }
     };
 </script>

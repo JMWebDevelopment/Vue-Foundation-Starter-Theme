@@ -66,8 +66,7 @@
                 pageTitle: '',
                 page: this.$route.query.page,
                 totalPages: '',
-                totalCount: '',
-                catSlug: this.$route.params.categorySlug
+                totalCount: ''
             };
         },
         methods: {
@@ -97,11 +96,11 @@
             },
             getCatId: function( name ) {
                 const vm = this;
-                vm.catName = name;
                 vm.loaded = 'false';
                 axios.get( vuefoundationstarter.root + 'wp/v2/categories?slug=' + name )
                     .then( ( res ) => {
                         res = res.data[ 0 ];
+                        vm.catName = res.name;
 
                         if (res === undefined) {
                             vm.$router.push({name: 'NotFound'})
