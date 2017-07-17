@@ -49,6 +49,12 @@ export default new Router({
         },
 
         {
+            name: 'Search',
+            path: '/search/:searchTerm',
+            component: Search
+        },
+
+        {
             name: 'Tag',
             path: '/tag/:tagSlug',
             component: Tag
@@ -70,12 +76,6 @@ export default new Router({
             name: 'Day',
             path: '/:year/:month/:day',
             component: Day
-        },
-
-        {
-            name: 'Search',
-            path: '/search/:searchTerm',
-            component: Search
         },
 
         {
