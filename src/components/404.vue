@@ -1,9 +1,9 @@
 <template>
-    <div id="404-page" class="row">
+    <div id="404-page" class="grid-x">
         <h1 class="title is-1">Page not found</h1>
         <p>Whoops! You aren't supposed to be here. The post or page you're looking for either no longer exists or has been moved. You can use the search form below or <router-link :to="{ name: 'Homepage'}">go back to the home page</router-link> to find what you're looking for.</p>
         <input class="input not-found-search" type="text" placeholder="Search for keywords" v-model="term" v-on:keyup="searchPosts">
-        <div class="large-12 medium-12 small-12 column" v-for="post in posts" :key="post.slug">
+        <div class="cell" v-for="post in posts" :key="post.slug">
             <div class="rt-post">
                 <h2 class="rt-post-title"><router-link :to="{ name: 'post', params: { postSlug:post.slug }}"> {{ post.title.rendered }} </router-link> </h2>
                 <div class="rt-meta">
