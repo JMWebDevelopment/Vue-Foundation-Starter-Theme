@@ -74,15 +74,15 @@
             getPosts: function( catId ) {
                 const vm = this;
                 vm.loaded = 'false';
-                if (this.$route.query.page !== undefined) {
-                    this.postsUrl = '&page=' + this.$route.query.page;
+                if (vm.$route.query.page !== undefined) {
+                    vm.postsUrl = '&page=' + vm.$route.query.page;
                 } else {
-                    this.postsUrl = '';
+                    vm.postsUrl = '';
                 }
-                axios.get( vuefoundationstarter.root + 'wp/v2/posts?categories=' + catId + this.postsUrl )
+                axios.get( vuefoundationstarter.root + 'wp/v2/posts?categories=' + catId + vm.postsUrl )
                     .then( ( res ) => {
                         vm.posts = res.data;
-                        this.totalPages = res.headers['x-wp-totalpages'];
+                        vm.totalPages = res.headers['x-wp-totalpages'];
                         if (vm.posts === undefined) {
                             vm.$router.push({name: 'NotFound'})
                         }

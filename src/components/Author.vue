@@ -79,12 +79,12 @@
             getPosts: function( tagId ) {
                 const vm = this;
                 vm.loaded = 'false';
-                if (this.$route.query.page !== undefined) {
-                    this.postsUrl = '&page=' + this.$route.query.page;
+                if (vm.$route.query.page !== undefined) {
+                    vm.postsUrl = '&page=' + vm.$route.query.page;
                 } else {
-                    this.postsUrl = '';
+                    vm.postsUrl = '';
                 }
-                axios.get( vuefoundationstarter.root + 'wp/v2/posts?author=' + tagId + this.postsUrl )
+                axios.get( vuefoundationstarter.root + 'wp/v2/posts?author=' + tagId + vm.postsUrl )
                     .then( ( res ) => {
                         vm.posts = res.data;
                         this.totalPages = res.headers['x-wp-totalpages'];

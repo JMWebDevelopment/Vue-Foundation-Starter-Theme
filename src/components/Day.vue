@@ -95,16 +95,16 @@
                     vm.$router.push({name: 'NotFound'})
                 } else {
 
-                    var startDate = new Date(vm.$route.params.year, vm.$route.params.month - 1, this.$route.params.day, 0, 0, 0, 0);
+                    var startDate = new Date(vm.$route.params.year, vm.$route.params.month - 1, vm.$route.params.day, 0, 0, 0, 0);
 
-                    var endDate = new Date(vm.$route.params.year, vm.$route.params.month + 1, this.$route.params.day + 1, 0, 0, 0, 0);
+                    var endDate = new Date(vm.$route.params.year, vm.$route.params.month + 1, vm.$route.params.day + 1, 0, 0, 0, 0);
 
-                    if (this.$route.query.page !== undefined) {
+                    if (vm.$route.query.page !== undefined) {
                         vm.postsUrl = '&page=' + vm.$route.query.page;
                     } else {
                         vm.postsUrl = '';
                     }
-                    axios.get( vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString() + this.postsUrl )
+                    axios.get( vuefoundationstarter.root + 'wp/v2/posts?after=' + startDate.toISOString() + '&before=' + endDate.toISOString() + vm.postsUrl )
                         .then( ( res ) => {
                             vm.posts = res.data;
                             vm.totalPages = res.headers['x-wp-totalpages'];
@@ -143,12 +143,12 @@
             },
             previousClick () {
                 this.page = this.page - 1;
-                this.getCatId(this.$route.params.categorySlug);
+                this.getPage();
                 window.scrollTo(0, 0);
             },
             nextClick () {
                 this.page = this.page + 1;
-                this.getCatId(this.$route.params.categorySlug);
+                this.getPage();
                 window.scrollTo(0, 0);
             },
         },
