@@ -3,31 +3,32 @@ var gulp  = require('gulp'),
     gutil = require('gulp-util'),
     sass = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
-    minifycss = require('gulp-minify-css'),
     jshint = require('gulp-jshint'),
     stylish = require('jshint-stylish'),
     uglify = require('gulp-uglify'),
     concat = require('gulp-concat'),
     rename = require('gulp-rename'),
     plumber = require('gulp-plumber'),
-    bower = require('gulp-bower')
+    bower = require('gulp-bower'),
+    merge = require('merge-stream');
     
 // Compile Sass, Autoprefix and minify
 gulp.task('styles', function() {
-  return gulp.src('./assets/scss/**/*.scss')
-    .pipe(plumber(function(error) {
-            gutil.log(gutil.colors.red(error.message));
-            this.emit('end');
-    }))
-    .pipe(sass())
-    .pipe(autoprefixer({
-            browsers: ['last 2 versions'],
-            cascade: false
-        }))
-    .pipe(gulp.dest('./assets/css/'))     
-    .pipe(rename({suffix: '.min'}))
-    .pipe(minifycss())
-    .pipe(gulp.dest('./assets/css/'))
+  var places = ['./src/assets/scss/*.scss', './src/assets/scss/style.scss'];
+
+  var tasks = places.map(function(element) {
+      if ( element === './src/assets/scss/style.scss' ) {
+          return gulp.src('./src/assets/scss/style.scss')
+              .pipe(sass({includePaths: ['./node_modules/foundation-sites/scss']}).on('error', sass.logError))
+              .pipe(gulp.dest(''))
+      } else {
+          return gulp.src('./src/assets/scss/*.scss')
+              .pipe(sass({includePaths: ['./node_modules/foundation-sites/scss']}).on('error', sass.logError))
+              .pipe(gulp.dest('./src/assets/css/'))
+      }
+  });
+
+  return merge(tasks);
 });    
     
 // JSHint, concat, and minify JavaScript
